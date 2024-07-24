@@ -93,10 +93,12 @@ const mutateScratch3InPlace = (projectData) => {
   optimizeSb3Json(projectData);
 };
 
-export const downloadProject = async (projectData, progressCallback = () => {}) => {
+export const downloadProject = async (projectData, progressCallback = () => {}, signal) => {
   let analysis = unknownAnalysis();
 
   const options = {
+    signal,
+
     onProgress(type, loaded, total) {
       progressCallback(type, loaded, total);
     },

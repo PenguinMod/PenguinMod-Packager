@@ -8,7 +8,6 @@ specifiers:
   '@turbowarp/sbdl': ^2.3.0
   babel-jest: ^27.4.5
   babel-loader: ^8.2.3
-  comlink: ^4.3.1
   copy-webpack-plugin: ^6.4.1
   cross-env: ^7.0.3
   cross-fetch: ^3.1.4
@@ -50,7 +49,6 @@ devDependencies:
   '@babel/preset-env': 7.20.2_@babel+core@7.20.12
   babel-jest: 27.5.1_@babel+core@7.20.12
   babel-loader: 8.3.0_nwtvwtk5tmh22l2urnqucz7kqu
-  comlink: 4.3.1
   copy-webpack-plugin: 6.4.1_webpack@4.46.0
   cross-env: 7.0.3
   css-loader: 5.2.7_webpack@4.46.0
@@ -2937,10 +2935,6 @@ packages:
     engines: {node: '>= 0.8'}
     dependencies:
       delayed-stream: 1.0.0
-    dev: true
-
-  /comlink/4.3.1:
-    resolution: {integrity: sha512-+YbhUdNrpBZggBAHWcgQMLPLH1KDF3wJpeqrCKieWQ8RL7atmgsgTQko1XEBK6PsecfopWNntopJ+ByYG1lRaA==}
     dev: true
 
   /commander/2.1.0:
