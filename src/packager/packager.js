@@ -526,6 +526,7 @@ cd "$(dirname "$0")"
     const contentsPrefix = isMac ? `${rootPrefix}${packageName}.app/Contents/` : rootPrefix;
     const resourcesPrefix = isMac ? `${contentsPrefix}Resources/app/` : `${contentsPrefix}resources/app/`;
     const electronMainName = 'electron-main.js';
+    const electronPreloadName = 'electron-preload.js';
     const iconName = 'icon.png';
 
     const icon = await Adapter.getAppIcon(this.options.app.icon);
@@ -538,8 +539,8 @@ cd "$(dirname "$0")"
     };
     zip.file(`${resourcesPrefix}package.json`, JSON.stringify(manifest, null, 4));
 
-    const mainJS = `'use strict';
-const {app, BrowserWindow, Menu, shell, screen, dialog} = require('electron');
+    let mainJS = `'use strict';
+const {app, BrowserWindow, Menu, shell, screen, dialog, ipcMain} = require('electron');
 const path = require('path');
 
 const isWindows = process.platform === 'win32';
@@ -572,6 +573,7 @@ const createWindow = (windowOptions) => {
       sandbox: true,
       contextIsolation: true,
       nodeIntegration: false,
+      preload: path.resolve(__dirname, ${JSON.stringify(electronPreloadName)}),
     },
     show: true,
     width: 480,
@@ -720,7 +722,173 @@ app.whenReady().then(() => {
   createProjectWindow(defaultProjectURL);
 });
 `;
+
+    let preloadJS = `'use strict';
+const {contextBridge, ipcRenderer} = require('electron');
+`;
+
+    if (this.project.analysis.usesSteamworks) {
+      mainJS += `
+      const enableSteamworks = () => {
+        const APP_ID = +${JSON.stringify(this.options.steamworks.appId)};
+        const steamworks = require('./steamworks.js/');
+        const client = steamworks.init(APP_ID);
+        const async = (event, callback) => ipcMain.handle(event, (e, ...args) => {
+          return callback(...args);
+        });
+        const sync = (event, callback) => ipcMain.on(event, (e, ...args) => {
+          e.returnValue = callback(...args);
+        });
+        async('Steamworks.achievement.activate', (achievement) => client.achievement.activate(achievement));
+        async('Steamworks.achievement.clear', (achievement) => client.achievement.clear(achievement));
+        sync('Steamworks.achievement.isActivated', (achievement) => client.achievement.isActivated(achievement));
+        sync('Steamworks.apps.isDlcInstalled', (dlc) => client.apps.isDlcInstalled(dlc));
+        sync('Steamworks.localplayer.getName', () => client.localplayer.getName());
+        sync('Steamworks.localplayer.getLevel', () => client.localplayer.getLevel());
+        sync('Steamworks.localplayer.getIpCountry', () => client.localplayer.getIpCountry());
+        sync('Steamworks.localplayer.getSteamId', () => client.localplayer.getSteamId());
+        async('Steamworks.overlay.activateToWebPage', (url) => client.overlay.activateToWebPage(url));
+
+        //-----NEW PENGUINMOD STUFF-----
+        sync('Steamworks.init', (appId) => client.init(appId));
+        sync('Steamworks.restartAppIfNecessary', (appId) => client.restartAppIfNecessary(appId));
+        sync('Steamworks.runCallbacks', () => client.runCallbacks());
+
+        async('Steamworks.auth.getSessionTicketWithSteamId', (steamId64, timeoutSeconds) => client.auth.getSessionTicketWithSteamId(steamId64, timeoutSeconds));
+        async('Steamworks.auth.getSessionTicketWithIp', (ip, timeoutSeconds) => client.auth.getSessionTicketWithIp(ip, timeoutSeconds));
+        async('Steamworks.auth.getAuthTicketForWebApi', (identity, timeoutSeconds) => client.auth.getAuthTicketForWebApi(identity, timeoutSeconds));
+
+        sync('Steamworks.apps.isSubscribedApp', (appId) => client.apps.isSubscribedApp(appId));
+        sync('Steamworks.apps.isAppInstalled', (appId) => client.apps.isAppInstalled(appId));
+        sync('Steamworks.apps.isSubscribedFromFreeWeekend', () => client.apps.isSubscribedFromFreeWeekend());
+        sync('Steamworks.apps.isVacBanned', () => client.apps.isVacBanned());
+        sync('Steamworks.apps.isCybercafe', () => client.apps.isCybercafe());
+        sync('Steamworks.apps.isLowViolence', () => client.apps.isLowViolence());
+        sync('Steamworks.apps.isSubscribed', () => client.apps.isSubscribed());
+        sync('Steamworks.apps.appBuildId', () => client.apps.appBuildId());
+        sync('Steamworks.apps.appInstallDir', (appId) => client.apps.appInstallDir(appId));
+        sync('Steamworks.apps.appOwner', () => client.apps.appOwner());
+        sync('Steamworks.apps.availableGameLanguages', () => client.apps.availableGameLanguages());
+        sync('Steamworks.apps.currentGameLanguage', () => client.apps.currentGameLanguage());
+        sync('Steamworks.apps.currentBetaName', () => client.apps.currentBetaName());
+
+        sync('Steamworks.cloud.isEnabledForAccount', () => client.cloud.isEnabledForAccount());
+        sync('Steamworks.cloud.isEnabledForApp', () => client.cloud.isEnabledForApp());
+        sync('Steamworks.cloud.listFiles', () => client.cloud.listFiles());
+
+        sync('Steamworks.input.init', () => client.input.init());
+        sync('Steamworks.input.getControllers', () => client.input.getControllers());
+        sync('Steamworks.input.getActionSet', (actionSetName) => client.input.getActionSet(actionSetName));
+        sync('Steamworks.input.getDigitalAction', (actionName) => client.input.getDigitalAction(actionName));
+        sync('Steamworks.input.getAnalogAction', (actionName) => client.input.getAnalogAction(actionName));
+        sync('Steamworks.input.shutdown', () => client.input.shutdown());
+
+        async('Steamworks.matchmaking.createLobby', (lobbyType, maxMembers) => client.matchmaking.createLobby(lobbyType, maxMembers));
+        async('Steamworks.matchmaking.joinLobby', (lobbyId) => client.matchmaking.joinLobby(lobbyId));
+        async('Steamworks.matchmaking.getLobbies', () => client.matchmaking.getLobbies());
+
+        async('Steamworks.networking.sendP2PPacket', (steamId64, sendType, data) => client.networking.sendP2PPacket(steamId64, sendType, data));
+        sync('Steamworks.networking.acceptP2PSession', (steamId64) => client.networking.acceptP2PSession(steamId64));
+
+        sync('Steamworks.overlay.activateDialog', (dialog) => client.overlay.activateDialog(dialog));
+        sync('Steamworks.overlay.activateDialogToUser', (dialog, steamId64) => client.overlay.activateDialogToUser(dialog, steamId64));
+        sync('Steamworks.overlay.activateInviteDialog', (lobbyId) => client.overlay.activateInviteDialog(lobbyId));
+        sync('Steamworks.overlay.activateToStore', (appId, flag) => client.overlay.activateToStore(appId, flag));
+
+        sync('Steamworks.stats.getInt', (name) => client.stats.getInt(name));
+        sync('Steamworks.stats.setInt', (name, value) => client.stats.setInt(name, value));
+        sync('Steamworks.stats.store', () => client.stats.store());
+        sync('Steamworks.stats.resetAll', (achievementsToo) => client.stats.resetAll(achievementsToo));
+
+        sync('Steamworks.utils.getAppId', () => client.utils.getAppId());
+        sync('Steamworks.utils.getServerRealTime', () => client.utils.getServerRealTime());
+        sync('Steamworks.utils.isSteamRunningOnSteamDeck', () => client.utils.isSteamRunningOnSteamDeck());
+        async('Steamworks.utils.showGamepadTextInput', (inputMode, inputLineMode, description, maxCharacters, existingText) => client.utils.showGamepadTextInput(inputMode, inputLineMode, description, maxCharacters, existingText));
+        async('Steamworks.utils.showFloatingGamepadTextInput', (keyboardMode, x, y, width, height) => client.utils.showFloatingGamepadTextInput(keyboardMode, x, y, width, height));
+
+        async('Steamworks.workshop.createItem', (appId) => client.workshop.createItem(appId));
+        async('Steamworks.workshop.updateItem', (itemId, updateDetails, appId) => client.workshop.updateItem(itemId, updateDetails, appId));
+        async('Steamworks.workshop.updateItemWithCallback', (itemId, updateDetails, appId, successCallback, errorCallback, progressCallback, progressCallbackIntervalMs) => client.workshop.updateItemWithCallback(itemId, updateDetails, appId, successCallback, errorCallback, progressCallback, progressCallbackIntervalMs));
+        async('Steamworks.workshop.subscribe', (itemId) => client.workshop.subscribe(itemId));
+        async('Steamworks.workshop.unsubscribe', (itemId) => client.workshop.unsubscribe(itemId));
+        sync('Steamworks.workshop.state', (itemId) => client.workshop.state(itemId));
+        sync('Steamworks.workshop.installInfo', (itemId) => client.workshop.installInfo(itemId));
+        sync('Steamworks.workshop.downloadInfo', (itemId) => client.workshop.downloadInfo(itemId));
+        sync('Steamworks.workshop.download', (itemId, highPriority) => client.workshop.download(itemId, highPriority));
+        sync('Steamworks.workshop.getSubscribedItems', () => client.workshop.getSubscribedItems());
+        async('Steamworks.workshop.getItem', (item, queryConfig) => client.workshop.getItem(item, queryConfig));
+        async('Steamworks.workshop.getItems', (items, queryConfig) => client.workshop.getItems(items, queryConfig));
+        async('Steamworks.workshop.getAllItems', (page, queryType, itemType, creatorAppId, consumerAppId, queryConfig) => client.workshop.getAllItems(page, queryType, itemType, creatorAppId, consumerAppId, queryConfig));
+        async('Steamworks.workshop.getUserItems', (page, accountId, listType, itemType, sortOrder, creatorAppId, consumerAppId, queryConfig) => client.workshop.getUserItems(page, accountId, listType, itemType, sortOrder, creatorAppId, consumerAppId, queryConfig));
+
+        steamworks.electronEnableSteamOverlay();
+        sync('Steamworks.ok', () => true);
+      };
+      try {
+        enableSteamworks();
+      } catch (e) {
+        console.error(e);
+        ipcMain.on('Steamworks.ok', (e) => {
+          e.returnValue = false;
+        });
+        app.whenReady().then(() => {
+          const ON_ERROR = ${JSON.stringify(this.options.steamworks.onError)};
+          const window = BrowserWindow.getAllWindows()[0];
+          if (ON_ERROR === 'warning') {
+            dialog.showMessageBox(window, {
+              type: 'error',
+              message: 'Error initializing Steamworks: ' + e,
+            });
+          } else if (ON_ERROR === 'error') {
+            dialog.showMessageBoxSync(window, {
+              type: 'error',
+              message: 'Error initializing Steamworks: ' + e,
+            });
+            app.quit();
+          }
+        });
+      }`;
+
+      preloadJS += `
+      const enableSteamworks = () => {
+        const sync = (event) => (...args) => ipcRenderer.sendSync(event, ...args);
+        const async = (event) => (...args) => ipcRenderer.invoke(event, ...args);
+        contextBridge.exposeInMainWorld('Steamworks', {
+          ok: sync('Steamworks.ok'),
+          achievement: {
+            activate: async('Steamworks.achievement.activate'),
+            clear: async('Steamworks.achievement.clear'),
+            isActivated: sync('Steamworks.achievement.isActivated'),
+          },
+          apps: {
+            isDlcInstalled: async('Steamworks.apps.isDlcInstalled'),
+          },
+          leaderboard: {
+            uploadScore: async('Steamworks.leaderboard.uploadScore'),
+          },
+          localplayer: {
+            getName: sync('Steamworks.localplayer.getName'),
+            getLevel: sync('Steamworks.localplayer.getLevel'),
+            getIpCountry: sync('Steamworks.localplayer.getIpCountry'),
+            getSteamId: sync('Steamworks.localplayer.getSteamId'),
+          },
+          overlay: {
+            activateToWebPage: async('Steamworks.overlay.activateToWebPage'),
+          },
+        });
+      };
+      enableSteamworks();`;
+
+      const steamworksBuffer = await this.fetchLargeAsset('steamworks.js', 'arraybuffer');
+      const steamworksZip = await (await getJSZip()).loadAsync(steamworksBuffer);
+      for (const [path, file] of Object.entries(steamworksZip.files)) {
+        const newPath = path.replace(/^package\//, 'steamworks.js/');
+        setFileFast(zip, `${resourcesPrefix}${newPath}`, file);
+      }
+    }
+
     zip.file(`${resourcesPrefix}${electronMainName}`, mainJS);
+    zip.file(`${resourcesPrefix}${electronPreloadName}`, preloadJS);
 
     for (const [path, data] of Object.entries(projectZip.files)) {
       setFileFast(zip, `${resourcesPrefix}${path}`, data);
@@ -1671,6 +1839,12 @@ Packager.DEFAULT_OPTIONS = () => ({
       x: 0,
       y: 0
     }
+  },
+  steamworks: {
+    // 480 is Spacewar, the Steamworks demo game
+    appId: '480',
+    // 'ignore' (no alert), 'warning' (alert and continue), or 'error' (alert and exit)
+    onError: 'warning'
   },
   extensions: [],
   bakeExtensions: true,
