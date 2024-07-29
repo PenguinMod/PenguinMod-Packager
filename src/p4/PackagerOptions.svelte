@@ -1033,9 +1033,9 @@
       ]);
     }}
   >
-    <h2>Steamworks</h2>
+    <h2>{$_('options.steamworksExtension')}</h2>
     {#if ['electron-win64', 'electron-linux64', 'electron-mac'].includes($options.target)}
-      <p>{$_('options.steamworksAvailable')}</p>
+      <p>{$_('options.steamworksAvailable').replace('{n}', '480')}</p>
       <label class="option">
         {$_('options.steamworksAppId')}
         <input pattern="\d+" minlength="1" bind:value={$options.steamworks.appId}>
@@ -1059,6 +1059,9 @@
   </Section>
 {/if}
 
+    <p>
+      <a href="https://extensions.turbowarp.org/steamworks">{$_('options.steamworksDocumentation')}</a>
+    </p>
 <Section>
   <DropArea on:drop={(e) => importOptionsFromDataTransfer(e.detail)}>
     <div class="buttons">
