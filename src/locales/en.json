@@ -457,11 +457,11 @@
       "string": "Zip, combine assets into single file (not recommended)"
     },
     "application-win32": {
-      "string": "{type} Windows application (32-bit or 64-bit)",
+      "string": "{type} Windows application (32-bit)",
       "context": "type will become something like 'NW.js' or 'Electron'. Do not translate 'Windows'."
     },
     "application-win64": {
-      "string": "{type} Windows application (64-bit only, not recommended)",
+      "string": "{type} Windows application (64-bit)",
       "context": "type will become something like 'NW.js' or 'Electron'. Do not translate 'Windows'."
     },
     "application-win-arm": {
@@ -473,7 +473,7 @@
       "context": "type will become something like 'NW.js' or 'Electron'. Do not translate 'macOS'."
     },
     "application-linux64": {
-      "string": "{type} Linux application (64-bit only)",
+      "string": "{type} Linux application (64-bit)",
       "context": "type will become something like 'NW.js' or 'Electron'. Do not translate 'Linux'."
     },
     "application-linux-arm32": {
@@ -520,6 +520,39 @@
     },
     "maxTextureDimension": {
       "string": "Increase max vector costume resolution to make large costumes look better. May increase memory use and cause crashes."
+    },
+    "steamworksExtension": {
+      "string": "Steamworks Extension",
+      "context": "Title of section that appears when using the Steamworks extension"
+    },
+    "steamworksMacWarning": {
+      "string": "Warning: macOS games published on Steam need to be notarized by Apple, which the packager doesn't support. You can still test your game on a Mac, but you won't be able to publish it for macOS yet.",
+      "developer_comment": "When using the Steamworks extension, warning that appears whenever macOS support is used or mentioned."
+    },
+    "steamworksDocumentation": {
+      "string": "See the extension's documentation for more details.",
+      "context": "Link to more documentation about the Steamworks extension"
+    },
+    "steamworksUnavailable": {
+      "string": "To enable the Steamworks extension, you must use one of these environments:"
+    },
+    "steamworksAvailable": {
+      "string": "This project is using the Steamworks extension. You can find your game's App ID in Steamworks, or use {n} for testing with the Steamworks demo game."
+    },
+    "steamworksAppId": {
+      "string": "App ID"
+    },
+    "steamworksOnError": {
+      "string": "If there is an error initializing Steamworks"
+    },
+    "steamworksIgnore": {
+      "string": "Do nothing"
+    },
+    "steamworksWarning": {
+      "string": "Show a warning but continue"
+    },
+    "steamworksError": {
+      "string": "Show an error and exit"
     },
     "package": {
       "string": "Package",
