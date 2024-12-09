@@ -58,7 +58,7 @@ const makeScaffolding = ({full}) => ({
         loader: 'babel-loader',
         include: [
           path.resolve(__dirname, 'src'),
-          /node_modules[\\/]scratch-[^\\/]+[\\/]src/
+          /scratch-[^\\/]+[\\/]src/
         ],
         options: {
           babelrc: false,
