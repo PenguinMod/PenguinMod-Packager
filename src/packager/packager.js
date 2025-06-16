@@ -1482,7 +1482,7 @@ cd "$(dirname "$0")"
           window.close();
         }
       });` : ''}
-      ${this.options.penguinmod.permissionManager.enabled ? '' : `vm.runtime.isProjectPermissionManagerDisabled = true;`}
+      ${this.options.penguinmod.permissionManager.enabled ? 'vm.runtime.isProjectPermissionManagerDisabled = false;' : `vm.runtime.isProjectPermissionManagerDisabled = true;`}
       ${this.options.penguinmod.permissionManager.unsandboxedJavascript ? `vm.runtime.extensionRuntimeOptions.javascriptUnsandboxed = true;` : ''}
 
       ${this.options.target.startsWith('nwjs-') ? `
