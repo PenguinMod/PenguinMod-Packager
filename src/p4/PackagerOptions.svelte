@@ -567,12 +567,6 @@
     <h3>Permissions</h3>
     <!-- svelte-ignore a11y-label-has-associated-control -->
     <label class="option">
-      <input type="checkbox" bind:checked={$options.penguinmod.permissionManager.enabled}>
-      Enable permission manager
-    </label>
-    <p>The permission manager in PenguinMod is the prompts that appear when asking for permission to do something. You can disable it if the permission manager doesn't work in your case, or is causing annoying pop-ups constantly throughout your project.</p>
-    <!-- svelte-ignore a11y-label-has-associated-control -->
-    <label class="option">
       <input type="checkbox" bind:checked={$options.penguinmod.permissionManager.unsandboxedJavascript}>
       Remove sandbox on the JavaScript Extension
     </label>
@@ -803,7 +797,18 @@
         }} />
         {$_('options.maxTextureDimension')}
       </label>
-    </details>
+
+      <!-- svelte-ignore a11y-label-has-associated-control -->
+      <label class="option">
+          <input type="checkbox" bind:checked={$options.penguinmod.permissionManager.enabled}>
+          Enable legacy permission manager
+        </label>
+        <p>
+            The legacy permission manager was an old implementation of the current security manager.
+            There is no need to enable it unless you have a very old project with the Permissions extension,
+            or some strange extension checks whether it's disabled or not.
+        </p>
+      </details>
   </div>
 </Section>
 
