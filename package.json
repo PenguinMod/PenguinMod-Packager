@@ -33,7 +33,6 @@
   "funding": "https://penguinmod.com/donate",
   "license": "Apache-2.0",
   "dependencies": {
-    "@babel/plugin-transform-optional-chaining": "^7.27.1",
     "@fiahfy/icns": "0.0.7",
     "@turbowarp/json": "^0.1.1",
     "@turbowarp/sbdl": "^3.0.0",
@@ -43,6 +42,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.5",
+    "@babel/plugin-transform-optional-chaining": "^7.27.1",
     "@babel/preset-env": "^7.16.5",
     "babel-jest": "^27.4.5",
     "babel-loader": "^8.2.3",
