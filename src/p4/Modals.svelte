@@ -120,24 +120,6 @@
           {$_('p4.cannotAccessProject')}
         </p>
         <p>
-          {$_('select.unsharedProjects')}
-        </p>
-        <p>
-          <ComplexMessage
-            message={$_('select.unsharedProjectsMore')}
-            values={{
-              link: {
-                text: 'https://docs.turbowarp.org/unshared-projects',
-                href: 'https://docs.turbowarp.org/unshared-projects',
-                newTab: true
-              }
-            }}
-          />
-        </p>
-        <p>
-          {$_('p4.cannotAccessProjectCaching')}
-        </p>
-        <p>
           <Button on:click={closeModal} text={$_('p4.close')} />
         </p>
       {:else}

@@ -1330,6 +1330,7 @@ cd "$(dirname "$0")"
         videoProvider: vm.runtime.ioDevices.video.provider
       };
 
+      vm.runtime.isPackagedProject = true;
       scaffolding.setUsername(${JSON.stringify(this.options.username)}.replace(/#/g, () => Math.floor(Math.random() * 10)));
       scaffolding.setAccentColor(${JSON.stringify(this.options.appearance.accent)});
 

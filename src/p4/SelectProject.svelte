@@ -15,7 +15,7 @@
   import Task from './task';
   import importExternalProject from './import-external-project';
 
-  const defaultProjectId = '163240';
+  const defaultProjectId = '4624594217';
 
   const type = writablePersistentStore('SelectProject.type', 'id');
   const projectId = writablePersistentStore('SelectProject.id', defaultProjectId);
@@ -258,12 +258,6 @@
         {/if}
       </div>
     </div>
-
-    {#if $type === "id"}
-      <p>
-        {$_('select.unsharedProjects')}
-      </p>
-    {/if}
 
     <Button on:click={load} text={$_('select.loadProject')} />
   </Section>
