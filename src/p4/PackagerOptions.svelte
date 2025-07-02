@@ -151,6 +151,8 @@
         thing = 'Electron';
       } else if (detail.asset === 'webview-mac') {
         thing = 'WKWebView';
+      } else if (detail.asset === 'steamworks.js') {
+        thing = 'Steamworks.js';
       }
       if (thing) {
         task.setProgressText($_('progress.loadingLargeAsset').replace('{thing}', thing));
@@ -1027,6 +1029,54 @@
   </div>
 {/if}
 
+{#if projectData.project.analysis.usesSteamworks}
+  <Section
+    accent="#136C9F"
+    reset={() => {
+      resetOptions([
+        'steamworks'
+      ]);
+    }}
+  >
+    <h2>{$_('options.steamworksExtension')}</h2>
+    {#if ['electron-win64', 'electron-linux64', 'electron-mac'].includes($options.target)}
+      <p>{$_('options.steamworksAvailable').replace('{n}', '480')}</p>
+      <label class="option">
+        {$_('options.steamworksAppId')}
+        <input pattern="\d+" minlength="1" bind:value={$options.steamworks.appId}>
+      </label>
+      <label class="option">
+        {$_('options.steamworksOnError')}
+        <select bind:value={$options.steamworks.onError}>
+          <option value="ignore">{$_('options.steamworksIgnore')}</option>
+          <option value="warning">{$_('options.steamworksWarning')}</option>
+          <option value="error">{$_('options.steamworksError')}</option>
+        </select>
+      </label>
+
+      {#if $options.target === 'electron-mac'}
+        <p class="warning">
+          {$_('options.steamworksMacWarning')}
+        </p>
+      {/if}
+    {:else}
+      <p>{$_('options.steamworksUnavailable')}</p>
+      <ul>
+        <li>{$_('options.application-win64').replace('{type}', 'Electron')}</li>
+        <li>
+          {$_('options.application-mac').replace('{type}', 'Electron')}
+          <br>
+          {$_('options.steamworksMacWarning')}
+        </li>
+        <li>{$_('options.application-linux64').replace('{type}', 'Electron')}</li>
+      </ul>
+    {/if}
+  </Section>
+{/if}
+
+    <p>
+      <a href="https://extensions.turbowarp.org/steamworks">{$_('options.steamworksDocumentation')}</a>
+    </p>
 <Section>
   <DropArea on:drop={(e) => importOptionsFromDataTransfer(e.detail)}>
     <div class="buttons">
