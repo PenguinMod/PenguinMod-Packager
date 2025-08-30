@@ -274,6 +274,8 @@ class Packager extends EventTarget {
     } else {
       texts.push(await this.fetchLargeAsset('scaffolding-min', 'text'));
     }
+    window.test = texts;
+    console.log("READING SCAFFOLDING");
     if (Object.values(this.getAddonOptions()).some((i) => i)) {
       texts.push(await this.fetchLargeAsset('addons', 'text'));
     }
