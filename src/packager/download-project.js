@@ -5,7 +5,8 @@ const unknownAnalysis = () => ({
   stageVariables: [],
   stageComments: [],
   usesMusic: true,
-  extensions: []
+  extensions: [],
+  builtInExts: [],
 });
 
 const analyzeScratch2 = (projectData) => {
@@ -41,12 +42,14 @@ const analyzeScratch3 = (projectData) => {
   // TODO: usesMusic has possible false negatives
   const usesMusic = projectData.extensions.includes('music');
   const extensions = projectData.extensionURLs ? Object.values(projectData.extensionURLs) : [];
+  const builtInExts = projectData.extensions;
   return {
     ...unknownAnalysis(),
     stageVariables,
     stageComments,
     usesMusic,
-    extensions
+    extensions,
+    builtInExts
   };
 };
 
