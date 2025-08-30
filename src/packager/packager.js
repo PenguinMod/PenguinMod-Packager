@@ -1212,7 +1212,7 @@ cd "$(dirname "$0")"
         this.options.controls.greenFlag.enabled ||
         this.options.controls.pause.enabled ||
         this.options.controls.stopAll.enabled ||
-        this.options.controls.fullscreen.enabled ||
+        this.options.controls.fullscreen.enabled
       ) ? `.control-button {
       width: 2rem;
       height: 2rem;
