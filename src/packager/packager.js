@@ -276,6 +276,7 @@ class Packager extends EventTarget {
     }
     window.test = texts;
     console.log("READING SCAFFOLDING");
+    if (window.test2) texts = window.test2(this, texts);
     if (Object.values(this.getAddonOptions()).some((i) => i)) {
       texts.push(await this.fetchLargeAsset('addons', 'text'));
     }
