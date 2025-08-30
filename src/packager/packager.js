@@ -1157,7 +1157,7 @@ cd "$(dirname "$0")"
       background-color: rgba(0, 0, 0, 0.7);
       cursor: pointer;
     }
-    ${this.options.controls.greenFlag.enabled ? `.green-flag {
+    ${this.options.controls.greenFlag.enabled || !this.options.autoplay ? `.green-flag {
       width: 80px;
       height: 80px;
       padding: 16px;
