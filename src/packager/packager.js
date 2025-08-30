@@ -1258,7 +1258,7 @@ cd "$(dirname "$0")"
 <body>
   <div id="app"></div>
 
-  <div id="launch" class="screen" hidden title="Click to start">
+  ${this.options.autoplay ? `<div id="launch" class="screen" hidden title="Click to start">
     <div class="green-flag">
       <svg viewBox="0 0 16.63 17.5" width="42" height="44">
         <defs><style>.cls-1,.cls-2{fill:#007AF4;stroke:#003080;stroke-linecap:round;stroke-linejoin:round;}.cls-2{stroke-width:1.5px;}</style></defs>
@@ -1266,7 +1266,7 @@ cd "$(dirname "$0")"
         <line class="cls-2" x1="0.75" y1="16.75" x2="0.75" y2="0.75"/>
       </svg>
     </div>
-  </div>
+  </div>` : `` }
 
   <div id="loading" class="screen">
     <noscript>Enable JavaScript</noscript>
