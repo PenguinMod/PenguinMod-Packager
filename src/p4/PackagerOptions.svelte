@@ -25,7 +25,7 @@
 
   export let projectData;
   export let title;
-
+  
   // JSON can't easily parse Infinity, so we'll just store large numbers instead
   const ALMOST_INFINITY = 9999999999;
 
@@ -790,6 +790,19 @@
         <input type="checkbox" bind:checked={$options.packagedRuntime} />
         {$_('options.packagedRuntime')}
       </label>
+      
+      <!-- TODO: when removing this check, make sure src/packager/packager has this enabled by default -->
+      {#if window.testRemoveUnusedBuiltins == true}
+        <label class="option">
+            <input type="checkbox" bind:checked={$options.removeUnusedBuiltinExtensions} />
+            Remove bundled engine extensions when unused
+          </label>
+          <p>
+            When making a project, PenguinMod's engine has nearly every available extension built into the runtime.
+            This setting will remove extensions you are not using from the runtime, but may break blocks that cause
+            these built-in extensions to be loaded at runtime (ex, load project from URL)
+          </p>
+      {/if}
 
       <label class="option">
         <input type="checkbox" checked={$options.maxTextureDimension !== defaultOptions.maxTextureDimension} on:change={(e) => {
