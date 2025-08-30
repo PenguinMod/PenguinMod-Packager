@@ -1157,7 +1157,7 @@ cd "$(dirname "$0")"
       background-color: rgba(0, 0, 0, 0.7);
       cursor: pointer;
     }
-    .green-flag {
+    ${this.options.controls.greenFlag.enabled ? `.green-flag {
       width: 80px;
       height: 80px;
       padding: 16px;
@@ -1168,7 +1168,7 @@ cd "$(dirname "$0")"
       justify-content: center;
       align-items: center;
       box-sizing: border-box;
-    }
+    }` : ''}
     #loading {
       ${this.options.loadingScreen.image && this.options.loadingScreen.imageMode === 'stretch'
         ? `background-image: url(${await Adapter.readAsURL(this.options.loadingScreen.image, 'stretched loading screen')});
@@ -1208,7 +1208,12 @@ cd "$(dirname "$0")"
       max-height: 200px;
       overflow: auto;
     }
-    .control-button {
+    ${(
+        this.options.controls.greenFlag.enabled ||
+        this.options.controls.pause.enabled ||
+        this.options.controls.stopAll.enabled ||
+        this.options.controls.fullscreen.enabled ||
+      ) ? `.control-button {
       width: 2rem;
       height: 2rem;
       padding: 0.375rem;
@@ -1225,8 +1230,9 @@ cd "$(dirname "$0")"
     }
     .control-button.active {
       background: ${this.options.appearance.accent}59;
-    }
-    .fullscreen-button {
+    }` : '' }
+    ${this.options.controls.fullscreen.enabled ?
+    `.fullscreen-button {
       background: white !important;
     }
     .standalone-fullscreen-button {
@@ -1237,7 +1243,7 @@ cd "$(dirname "$0")"
       border-radius: 0 0 0 4px;
       padding: 4px;
       cursor: pointer;
-    }
+    }` : ''}
     .sc-canvas {
       cursor: ${await this.generateCursor()};
     }
