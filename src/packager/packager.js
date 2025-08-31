@@ -1687,7 +1687,8 @@ Packager.DEFAULT_OPTIONS = () => ({
     warpTimer: false
   },
   packagedRuntime: true,
-  removeUnusedBuiltinExtensions: false, // make true when done
+  optimizeCode: false, // experimental
+  removeDefaultFonts: false, // experimental
   target: 'html',
   app: {
     icon: null,
