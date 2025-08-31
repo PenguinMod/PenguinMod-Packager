@@ -790,17 +790,19 @@
         <input type="checkbox" bind:checked={$options.packagedRuntime} />
         {$_('options.packagedRuntime')}
       </label>
-      
-      <!-- TODO: when removing this check, make sure src/packager/packager has this enabled by default -->
+
       {#if window.testRemoveUnusedBuiltins == true}
         <label class="option">
-            <input type="checkbox" bind:checked={$options.removeUnusedBuiltinExtensions} />
-            Remove bundled engine extensions when unused
-          </label>
+            <input type="checkbox" bind:checked={$options.optimizeCode} />
+            Optimize generated code
+        </label>
+        <label class="option">
+            <input type="checkbox" bind:checked={$options.removeDefaultFonts} />
+            Remove default fonts (Sans Serif, Pixel, etc)
+        </label>
           <p>
-            When making a project, PenguinMod's engine has nearly every available extension built into the runtime.
-            This setting will remove extensions you are not using from the runtime, but may break blocks that cause
-            these built-in extensions to be loaded at runtime (ex, load project from URL)
+            WARNING! These options are very <b>experimental.</b> They can help reduce your Packaged Project’s file size
+            by shortening code and removing unused parts. However they could cause errors during generation!
           </p>
       {/if}
 
