@@ -42,6 +42,24 @@
 export const optiCompress = (code, options) => {
   const builtIns = options.project.analysis.builtInExts;
 
+  /* remove fonts */
+  const fontObjectInd = code.indexOf('{"Sans Serif":');
+  const fontObjectEnd = code.indexOf('}', fontObjectInd) + 1;
+  const fontObj = code.substring(fontObjectInd, fontObjectEnd);
+
+  const regex = /"([^"]+)"\s*:|([A-Za-z0-9_$]+)\s*:/g;
+  let count = 0;
+  while (regex.exec(fontObj)) count++;
+
+  const search = code.substring(code.indexOf(',function(A,e)', fontObjectEnd), code.length);
+  let offset = fontObjectEnd;
+  for (var i = 0; i < count; i++) {
+    const fontStart = search.indexOf('{', offset) + (i === 0 ? 16: 0);
+    const prevEnd = search.indexOf('}', offset) + 1;
+    offset = search.indexOf('}', prevEnd);
+    code = code.replace(search.substring(fontStart + 1, offset), '');
+  }
+
   /* remove some lingering vm comments/spacing */
   const vmCommentSec = code.indexOf('+="let stuckCounter = 0;');
   const vmCommentSecEnd = code.indexOf('("executeInCompatibilityLayer")&&!e.includes("const waitPromise")');
@@ -105,8 +123,8 @@ export const optiCompress = (code, options) => {
   }
 
   /* remove unused built-in extensions */
-  const getExtWrapper = (code, id) => {
-    const classIndex = code.indexOf(code);
+  const getExtWrapper = (extCode, id) => {
+    const classIndex = code.indexOf(extCode);
     const before = code.slice(0, classIndex);
 
     const boundaryRegex = id === 'oddMessage' ? /},\s*function\s*\(\s*A\s*,\s*e\s*\)\s*{/g
@@ -115,12 +133,12 @@ export const optiCompress = (code, options) => {
     while ((match = boundaryRegex.exec(before)) !== null) {
       if (match.index < classIndex) start = match.index + 1;
     }
-    if (start === -1) return code;
+    if (start === -1) return extCode;
 
-    const after = code.slice(classIndex + code.length);
+    const after = code.slice(classIndex + extCode.length);
     const endMatch = after.indexOf('},');
-    if (endMatch === -1) return code;
-    const end = classIndex + code.length + endMatch + 2;
+    if (endMatch === -1) return extCode;
+    const end = classIndex + extCode.length + endMatch + 2;
 
     let wrapped = code.slice(start + 1, end);
     if (wrapped.includes('function(A,e){A.exports=class{')) {
@@ -131,20 +149,20 @@ export const optiCompress = (code, options) => {
     return wrapped;
   };
 
-  const getExtClasses = (code) => {
+  const getExtClasses = (extCode) => {
     const results = [];
     const classRegex = /class(?:\s+[a-zA-Z0-9_]+)?\s*\{/g;
     let match;
-    while ((match = classRegex.exec(code)) !== null) {
+    while ((match = classRegex.exec(extCode)) !== null) {
       const startIndex = match.index;
       let braceInd = 1, i = classRegex.lastIndex;
-      while (i < code.length && braceInd > 0) {
-        if (code[i] === '{') braceInd++;
-        else if (code[i] === '}') braceInd--;
+      while (i < extCode.length && braceInd > 0) {
+        if (extCode[i] === '{') braceInd++;
+        else if (extCode[i] === '}') braceInd--;
         i++;
       }
 
-      const classCode = code.slice(startIndex, i);
+      const classCode = extCode.slice(startIndex, i);
       if (classCode.includes('getInfo(){')) results.push(classCode);
     }
     return results;
