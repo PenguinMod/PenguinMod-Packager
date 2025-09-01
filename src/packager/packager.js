@@ -275,6 +275,7 @@ class Packager extends EventTarget {
     } else {
       texts.push(await this.fetchLargeAsset('scaffolding-min', 'text'));
     }
+    console.log(this)
     if (this.optimizeCode) texts[1] = optiCompress(texts[1], this);
     if (this.removeDefaultFonts) texts[1] = removeDefaultFonts(texts[1]);
     if (Object.values(this.getAddonOptions()).some((i) => i)) {
