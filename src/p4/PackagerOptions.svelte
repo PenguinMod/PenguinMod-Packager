@@ -791,20 +791,18 @@
         {$_('options.packagedRuntime')}
       </label>
 
-      {#if window.testRemoveUnusedBuiltins == true}
-        <label class="option">
-            <input type="checkbox" bind:checked={$options.optimizeCode} />
-            Optimize generated code
-        </label>
-        <label class="option">
-            <input type="checkbox" bind:checked={$options.removeDefaultFonts} />
-            Remove default fonts (Sans Serif, Pixel, etc)
-        </label>
-          <p>
-            WARNING! These options are very <b>experimental.</b> They can help reduce your Packaged Project’s file size
-            by shortening code and removing unused parts. However they could cause errors during generation!
-          </p>
-      {/if}
+      <label class="option">
+        <input type="checkbox" bind:checked={$options.optimizeCode} />
+        Optimize generated code
+      </label>
+      <label class="option">
+        <input type="checkbox" bind:checked={$options.removeDefaultFonts} />
+        Remove default fonts (Sans Serif, Pixel, etc)
+      </label>
+      <p>
+        WARNING! These options are very <b>experimental.</b> They can help reduce your Packaged Project’s file size
+        by shortening code and removing unused parts. However they could cause errors during generation!
+      </p>
 
       <label class="option">
         <input type="checkbox" checked={$options.maxTextureDimension !== defaultOptions.maxTextureDimension} on:change={(e) => {
