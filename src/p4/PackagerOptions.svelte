@@ -809,8 +809,8 @@
             or some strange extension checks whether it's disabled or not.
         </p>
 
-      <p>
-        WARNING! These options are very <b>experimental.</b> They can help reduce your Packaged Project’s file size
+      <p class="warning">
+        The options below are very <b>experimental.</b> They can help reduce your Packaged Project’s file size
         by shortening code and removing unused parts. However they could cause errors during generation!
       </p>
       <label class="option">
