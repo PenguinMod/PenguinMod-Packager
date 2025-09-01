@@ -42,24 +42,6 @@
 export const optiCompress = (code, options) => {
   const builtIns = options.project.analysis.builtInExts;
 
-  /* remove fonts */
-  const fontObjectInd = code.indexOf('{"Sans Serif":');
-  const fontObjectEnd = code.indexOf('}', fontObjectInd) + 1;
-  const fontObj = code.substring(fontObjectInd, fontObjectEnd);
-
-  const regex = /"([^"]+)"\s*:|([A-Za-z0-9_$]+)\s*:/g;
-  let count = 0;
-  while (regex.exec(fontObj)) count++;
-
-  const search = code.substring(code.indexOf(',function(A,e)', fontObjectEnd), code.length);
-  let offset = fontObjectEnd;
-  for (var i = 0; i < count; i++) {
-    const fontStart = search.indexOf('{', offset) + (i === 0 ? 16: 0);
-    const prevEnd = search.indexOf('}', offset) + 1;
-    offset = search.indexOf('}', prevEnd);
-    code = code.replace(search.substring(fontStart + 1, offset), '');
-  }
-
   /* remove some lingering vm comments/spacing */
   const vmCommentSec = code.indexOf('+="let stuckCounter = 0;');
   const vmCommentSecEnd = code.indexOf('("executeInCompatibilityLayer")&&!e.includes("const waitPromise")');
