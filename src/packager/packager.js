@@ -11,6 +11,7 @@ import {APP_NAME, WEBSITE, COPYRIGHT_NOTICE, ACCENT_COLOR} from './brand';
 import {OutdatedPackagerError} from '../common/errors';
 import {darken} from './colors';
 import {Adapter} from './adapter';
+import {removeDefaultFonts, optiCompress} from './compressor';
 import encodeBigString from './encode-big-string';
 
 const PROGRESS_LOADED_SCRIPTS = 0.1;
@@ -274,9 +275,8 @@ class Packager extends EventTarget {
     } else {
       texts.push(await this.fetchLargeAsset('scaffolding-min', 'text'));
     }
-    window.test = texts;
-    console.log("READING SCAFFOLDING");
-    if (window.test2) texts[1] = window.test2(this, texts[1]);
+    if (this.optimizeCode) texts[1] = optiCompress(texts[1], this);
+    if (this.removeDefaultFonts) texts[1] = removeDefaultFonts(texts[1]);
     if (Object.values(this.getAddonOptions()).some((i) => i)) {
       texts.push(await this.fetchLargeAsset('addons', 'text'));
     }
