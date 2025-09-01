@@ -792,19 +792,6 @@
       </label>
 
       <label class="option">
-        <input type="checkbox" bind:checked={$options.optimizeCode} />
-        Optimize generated code
-      </label>
-      <label class="option">
-        <input type="checkbox" bind:checked={$options.removeDefaultFonts} />
-        Remove default fonts (Sans Serif, Pixel, etc)
-      </label>
-      <p>
-        WARNING! These options are very <b>experimental.</b> They can help reduce your Packaged Project’s file size
-        by shortening code and removing unused parts. However they could cause errors during generation!
-      </p>
-
-      <label class="option">
         <input type="checkbox" checked={$options.maxTextureDimension !== defaultOptions.maxTextureDimension} on:change={(e) => {
           $options.maxTextureDimension = defaultOptions.maxTextureDimension * (e.target.checked ? 2 : 1);
         }} />
@@ -821,6 +808,19 @@
             There is no need to enable it unless you have a very old project with the Permissions extension,
             or some strange extension checks whether it's disabled or not.
         </p>
+
+      <p>
+        WARNING! These options are very <b>experimental.</b> They can help reduce your Packaged Project’s file size
+        by shortening code and removing unused parts. However they could cause errors during generation!
+      </p>
+      <label class="option">
+        <input type="checkbox" bind:checked={$options.optimizeCode} />
+        Optimize generated code
+      </label>
+      <label class="option">
+        <input type="checkbox" bind:checked={$options.removeDefaultFonts} />
+        Remove default fonts (Sans Serif, Pixel, etc)
+      </label>
       </details>
   </div>
 </Section>
