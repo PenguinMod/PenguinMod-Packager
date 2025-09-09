@@ -188,7 +188,7 @@ export const optiCompress = (code, options) => {
   code = code.replace(oldCheckMark, optimizedCheckMark).replace(twExtrasIcon, '');
 
   const imageURIs = code.match(/data:image\/[a-zA-Z0-9.+-]+;base64,[A-Za-z0-9+/=]+/g);
-  for (var i = 1; i < imageURIs.length; i++) {
+  if (imageURIs) for (var i = 1; i < imageURIs.length; i++) {
     if ((i === 15 || i === 16) && !builtIns.includes('fr3d')) code = code.replace(imageURIs[i], '');
     else if (i < 15 || i > 16) code = code.replace(imageURIs[i], '');
   }
