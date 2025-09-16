@@ -41,6 +41,7 @@
  */
 export const optiCompress = (code, options) => {
   const builtIns = options.project.analysis.builtInExts;
+  const BLANK_PACK = 'function(A,e,t){},';
 
   /* remove some lingering vm comments/spacing */
   const vmCommentSec = code.indexOf('+="let stuckCounter = 0;');
@@ -66,42 +67,60 @@ export const optiCompress = (code, options) => {
   /* remove threeJS Library if not used */
   if (!builtIns.includes('fr3d') || !builtIns.includes('jg3d')) {
     const threeInd = code.indexOf('function(A,e,t){"use strict";t.r(e),t.d(e,"ACESFilmicToneMapping"');
-    const nextWorkerInd = code.indexOf('window.__THREE__=n)},');
-    code = code.substring(0, threeInd) + code.substring(nextWorkerInd + 20, code.length);
+    const nextWorkerInd = code.indexOf('window.__THREE__=');
+    if (threeInd > 0 && nextWorkerInd > 0) {
+      code = code.substring(0, threeInd) + code.substring(nextWorkerInd + 20, code.length);
+    }
 
     const threeUtilsStart = code.indexOf('"deepCloneAttribute",(function(){');
     const threeUtilsEnd = code.indexOf('THREE.BufferGeometryUtils: mergeBufferAttributes() has been renamed to mergeAttributes()');
-    code = code.substring(0, threeUtilsStart - 42) + code.substring(threeUtilsEnd + 98, code.length);
+    if (threeUtilsStart > 0 && threeUtilsEnd > 0) {
+      code = code.substring(0, threeUtilsStart - 42) + code.substring(threeUtilsEnd + 98, code.length);
+    }
 
     const objLoaderInd = code.indexOf('t.r(e),t.d(e,"OBJLoader",(function(){') - 29;
     const objLoaderEnd = code.indexOf('t.r(e),t.d(e,"GLTFLoader",(function(){') - 29;
-    code = code.replace(code.substring(objLoaderInd, objLoaderEnd), 'function(A,e,t){},');
+    if (objLoaderInd > 0 && objLoaderEnd > 0) {
+      code = code.replace(code.substring(objLoaderInd, objLoaderEnd), BLANK_PACK);
+    }
 
     const gltfLoaderInd = code.indexOf('t.r(e),t.d(e,"GLTFLoader",(function(){') - 29;
     const gltfLoaderEnd = code.indexOf('A.morphTargetsRelative=!0,A}))}') + 54;
-    code = code.replace(code.substring(gltfLoaderInd, gltfLoaderEnd), 'function(A,e,t){},');
+    if (gltfLoaderInd > 0 && gltfLoaderEnd > 0) {
+      code = code.replace(code.substring(gltfLoaderInd, gltfLoaderEnd), BLANK_PACK);
+    }
 
     const fbxLoaderInd = code.indexOf('t.r(e),t.d(e,"FBXLoader",(function(){') - 29;
     const fbxLoaderEnd = code.indexOf('console.warn("THREE.FBXLoader: unsupported Euler Order: Spherical XYZ') + 394;
-    code = code.replace(code.substring(fbxLoaderInd, fbxLoaderEnd), 'function(A,e,t){},');
+    if (fbxLoaderInd > 0 && fbxLoaderEnd > 0) {
+      code = code.replace(code.substring(fbxLoaderInd, fbxLoaderEnd), BLANK_PACK);
+    }
 
     const convLoaderInd = code.indexOf('t.r(e),t.d(e,"ConvexGeometry",(function(){') - 29;
-    const convLoaderEnd = code.indexOf('this.setAttribute("position",new n.Float32BufferAttribute(e,3)),') + 128;
-    code = code.replace(code.substring(convLoaderInd, convLoaderEnd), 'function(A,e,t){},');
+    const convLoaderRegex = /this\.setAttribute\("([^"]+)",\s*new\s+([a-zA-Z_$][\w$]*)\.Float32BufferAttribute\(\s*([a-zA-Z_$][\w$]*),\s*3\s*\)\)/;
+    const convLoaderEnd = (convLoaderRegex.exec(code)?.index ?? -999) + 128;
+    if (convLoaderInd > 0 && convLoaderEnd > 0) {
+      code = code.replace(code.substring(convLoaderInd, convLoaderEnd), BLANK_PACK);
+    }
   }
 
   /* remove matter-js library if not used */
   if (!builtIns.includes('jwPsychic')) {
     const matterInd = code.indexOf('* matter-js') - 35;
-    const matterEnd = code.indexOf('}])},A.exports=t()}).call(this,t(14))}') + 38;
-    code = code.replace(code.substring(matterInd, matterEnd), 'function(A,e,t){}');
+    const matterEnd = code.indexOf('.addConstraint}])},A.exports=t()}).call(this,t(') + 52;
+    if (matterInd > 0 && matterEnd > 0) {
+      code = code.replace(code.substring(matterInd, matterEnd), 'function(A,e,t){}');
+    }
   }
 
   /* remove expanta-num library if not used */
   if (!builtIns.includes('jwNum')) {
     const expNumInd = code.indexOf('serializeMode:0,debug:0},o="[ExpantaNumError]') - 66;
-    const expNumEnd = code.indexOf('.call(e,t,e,A))||(A.exports=n)}()},') + 35;
-    code = code.replace(code.substring(expNumInd, expNumEnd), 'function(A,e,t){},');
+    const expRegex = /for\(var\s+([a-zA-Z_$][\w$]*)\s+in\s+([a-zA-Z_$][\w$]*)\.prototype=([a-zA-Z_$][\w$]*),\2\.JSON=0,\2\.STRING=1,\2\.NONE=0,\2\.NORMAL=1,\2\.ALL=2,\2\.clone=([a-zA-Z_$][\w$]*),\2\.config=\2\.set=/;
+    const expNumEnd = (expRegex.exec(code)?.index ?? -999) + 378;
+    if (expNumInd > 0 && expNumEnd > 0) {
+      code = code.replace(code.substring(expNumInd, expNumEnd), BLANK_PACK);
+    }
   }
 
   /* remove unused built-in extensions */
@@ -172,8 +191,8 @@ export const optiCompress = (code, options) => {
     if (!ext) continue;
     if (!builtIns.includes(id)) {
       const wrap = getExtWrapper(ext, id);
-      if (wrap.startsWith('function(A,e,t){},')) continue;
-      code = code.replace(wrap, 'function(A,e,t){},');
+      if (wrap.startsWith(BLANK_PACK)) continue;
+      code = code.replace(wrap, BLANK_PACK);
     }
   }
 
