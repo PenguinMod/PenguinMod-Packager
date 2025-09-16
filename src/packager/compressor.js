@@ -98,7 +98,8 @@ export const optiCompress = (code, options) => {
 
     const convLoaderInd = code.indexOf('t.r(e),t.d(e,"ConvexGeometry",(function(){') - 29;
     const convLoaderRegex = /this\.setAttribute\("([^"]+)",\s*new\s+([a-zA-Z_$][\w$]*)\.Float32BufferAttribute\(\s*([a-zA-Z_$][\w$]*),\s*3\s*\)\)/;
-    const convLoaderEnd = (convLoaderRegex.exec(code)?.index ?? -999) + 128;
+    const match = convLoaderRegex.exec(code);
+    const convLoaderEnd = (match ? match.index : -999) + 128;
     if (convLoaderInd > 0 && convLoaderEnd > 0) {
       code = code.replace(code.substring(convLoaderInd, convLoaderEnd), BLANK_PACK);
     }
@@ -117,7 +118,8 @@ export const optiCompress = (code, options) => {
   if (!builtIns.includes('jwNum')) {
     const expNumInd = code.indexOf('serializeMode:0,debug:0},o="[ExpantaNumError]') - 66;
     const expRegex = /for\(var\s+([a-zA-Z_$][\w$]*)\s+in\s+([a-zA-Z_$][\w$]*)\.prototype=([a-zA-Z_$][\w$]*),\2\.JSON=0,\2\.STRING=1,\2\.NONE=0,\2\.NORMAL=1,\2\.ALL=2,\2\.clone=([a-zA-Z_$][\w$]*),\2\.config=\2\.set=/;
-    const expNumEnd = (expRegex.exec(code)?.index ?? -999) + 378;
+    const match = expRegex.exec(code);
+    const expNumEnd = (match ? match.index : -999) + 378;
     if (expNumInd > 0 && expNumEnd > 0) {
       code = code.replace(code.substring(expNumInd, expNumEnd), BLANK_PACK);
     }
