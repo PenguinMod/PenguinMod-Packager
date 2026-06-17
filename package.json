@@ -38,6 +38,7 @@
     "@turbowarp/sbdl": "^3.0.0",
     "cross-fetch": "^4.0.0",
     "jszip": "^3.7.1",
+    "pmp-protobuf": "^1.8.5",
     "sha.js": "^2.4.11"
   },
   "devDependencies": {

@@ -18,8 +18,7 @@
       "url": "userscript.js",
       "matches": [
         "https://scratch.mit.edu/projects/*",
-        "https://penguinmod.com/#*",
-        "https://projects.penguinmod.com/api/projects/getPublished?type=file&id=*"
+        "https://penguinmod.com/#*"
       ]
     }
   ],
@@ -28,16 +27,14 @@
       "url": "style.css",
       "matches": [
         "https://scratch.mit.edu/projects/*",
-        "https://penguinmod.com/#*",
-        "https://projects.penguinmod.com/api/projects/getPublished?type=file&id=*"
+        "https://penguinmod.com/#*"
       ]
     },
     {
       "url": "gamepadlib.css",
       "matches": [
         "https://scratch.mit.edu/projects/*",
-        "https://penguinmod.com/#*",
-        "https://projects.penguinmod.com/api/projects/getPublished?type=file&id=*"
+        "https://penguinmod.com/#*"
       ]
     }
   ],

@@ -155,11 +155,10 @@
       task.setProgressText($_('progress.loadingProjectMetadata'));
       const metadata = await getProjectMetadata(id);
 
-      const token = metadata.token;
       projectTitle = metadata.title;
 
       task.setProgressText($_('progress.loadingProjectData'));
-      const {promise: loadProjectPromise, terminate} = await loadProject.fromID(id, token, progressCallback);
+      const {promise: loadProjectPromise, terminate} = await loadProject.fromID(id, progressCallback);
       task.whenAbort(terminate);
       project = await loadProjectPromise;
     } else if ($type === 'file') {

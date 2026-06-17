@@ -5,14 +5,12 @@ const getProjectMetadata = async (id) => {
   try {
     const meta = await request({
       url: [
-        // Hopefully one of these URLs won't be blocked.
-        `https://projects.penguinmod.com/api/projects/getPublished?id=${id}`,
-        `https://projects.penguinmod.com/api/projects/getPublished?id=${id}`
+        `https://projects.penguinmod.com/api/v1/projects/getproject?projectID=${id}&requestType=metadata`
       ],
       type: 'json'
     });
     return {
-      title: meta.name
+      title: meta.title
     };
   } catch (e) {
     if (e && e.status === 404) {

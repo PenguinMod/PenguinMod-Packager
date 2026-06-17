@@ -141,10 +141,6 @@
 
       const {storage, vm} = scaffolding;
       storage.addWebStore(
-        [storage.AssetType.Project],
-        (asset) => `https://projects.penguinmod.com/api/projects/getPublished?type=file&id=${asset.assetId}`
-      );
-      storage.addWebStore(
         [storage.AssetType.ImageVector, storage.AssetType.ImageBitmap, storage.AssetType.Sound],
         (asset) => `https://assets.scratch.mit.edu/internalapi/asset/${asset.assetId}.${asset.dataFormat}/get/`
       );
