@@ -1,80 +1,80 @@
 {
-  "name": "@penguinmod/packager",
-  "version": "1.9.2",
-  "description": "Converts PenguinMod projects into HTML files, zip archives, or executable programs for Windows, macOS, and Linux.",
-  "main": "dist/packager.js",
-  "scripts": {
-    "start": "webpack serve --host 0.0.0.0 --port 5000 --disable-host-check",
-    "clean": "rimraf dist",
-    "build": "npm run clean && webpack",
-    "build-prod": "cross-env NODE_ENV=production npm run build",
-    "watch": "webpack --watch",
-    "build-standalone": "cross-env STANDALONE=1 npm run build && node src/build/generate-standalone.js",
-    "build-standalone-prod": "cross-env NODE_ENV=production npm run build-standalone",
-    "build-node": "cross-env BUILD_MODE=node npm run build",
-    "build-node-prod": "cross-env NODE_ENV=production npm run build-node",
-    "test": "jest",
-    "prepublishOnly": "npm run test && npm run build-node-prod && node src/build/nodejs/update-readme.js node",
-    "postpublish": "node src/build/nodejs/update-readme.js restore"
-  },
-  "author": "PenguinMod",
-  "homepage": "https://github.com/PenguinMod/PenguinMod-Packager#readme",
-  "keywords": [
-    "penguinmod",
-    "packager"
-  ],
-  "bugs": {
-    "url": "https://github.com/PenguinMod/PenguinMod-Packager/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/PenguinMod/PenguinMod-Packager.git"
-  },
-  "funding": "https://penguinmod.com/donate",
-  "license": "Apache-2.0",
-  "dependencies": {
-    "@fiahfy/icns": "0.0.7",
-    "@turbowarp/json": "^0.1.1",
-    "@turbowarp/sbdl": "^3.0.0",
-    "cross-fetch": "^4.0.0",
-    "jszip": "^3.7.1",
-    "pmp-protobuf": "^1.8.5",
-    "sha.js": "^2.4.11"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.16.5",
-    "@babel/plugin-transform-optional-chaining": "^7.27.1",
-    "@babel/preset-env": "^7.16.5",
-    "babel-jest": "^27.4.5",
-    "babel-loader": "^8.2.3",
-    "copy-webpack-plugin": "^6.4.1",
-    "cross-env": "^7.0.3",
-    "css-loader": "^5.2.7",
-    "fastestsmallesttextencoderdecoder": "^1.0.22",
-    "file-loader": "^6.2.0",
-    "html-webpack-plugin": "^4.5.2",
-    "jest": "^27.4.5",
-    "pify": "6.1.0",
-    "rimraf": "^2.7.1",
-    "scratch-audio": "git+https://github.com/PenguinMod/PenguinMod-Audio.git#develop",
-    "scratch-render": "git+https://github.com/PenguinMod/PenguinMod-Render.git#develop",
-    "scratch-render-fonts": "github:PenguinMod/penguinmod-render-fonts#master",
-    "scratch-storage": "git+https://github.com/PenguinMod/PenguinMod-Storage.git#develop",
-    "scratch-svg-renderer": "git+https://github.com/PenguinMod/penguinmod-svg-renderer.git#develop",
-    "scratch-vm": "git+https://github.com/PenguinMod/PenguinMod-Vm.git#develop",
-    "style-loader": "^2.0.0",
-    "svelte": "^3.44.3",
-    "svelte-loader": "^3.1.2",
-    "url-loader": "^4.1.1",
-    "webpack": "4.47.0",
-    "webpack-bundle-analyzer": "^4.5.0",
-    "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^3.11.3",
-    "worker-loader": "^2.0.0"
-  },
-  "overrides": {
-    "webpack@4.47.0": {
-      "terser-webpack-plugin": "^4.2.3"
+    "name": "@penguinmod/packager",
+    "version": "1.9.2",
+    "description": "Converts PenguinMod projects into HTML files, zip archives, or executable programs for Windows, macOS, and Linux.",
+    "main": "dist/packager.js",
+    "scripts": {
+        "start": "webpack serve --host 0.0.0.0 --port 5000 --disable-host-check",
+        "clean": "rimraf dist",
+        "build": "npm run clean && webpack",
+        "build-prod": "cross-env NODE_ENV=production npm run build",
+        "watch": "webpack --watch",
+        "build-standalone": "cross-env STANDALONE=1 npm run build && node src/build/generate-standalone.js",
+        "build-standalone-prod": "cross-env NODE_ENV=production npm run build-standalone",
+        "build-node": "cross-env BUILD_MODE=node npm run build",
+        "build-node-prod": "cross-env NODE_ENV=production npm run build-node",
+        "test": "jest",
+        "prepublishOnly": "npm run test && npm run build-node-prod && node src/build/nodejs/update-readme.js node",
+        "postpublish": "node src/build/nodejs/update-readme.js restore"
+    },
+    "author": "PenguinMod",
+    "homepage": "https://github.com/PenguinMod/PenguinMod-Packager#readme",
+    "keywords": [
+        "penguinmod",
+        "packager"
+    ],
+    "bugs": {
+        "url": "https://github.com/PenguinMod/PenguinMod-Packager/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/PenguinMod/PenguinMod-Packager.git"
+    },
+    "funding": "https://penguinmod.com/donate",
+    "license": "Apache-2.0",
+    "dependencies": {
+        "@fiahfy/icns": "0.0.7",
+        "@turbowarp/json": "^0.1.2",
+        "@turbowarp/sbdl": "^7.0.0",
+        "cross-fetch": "^4.1.0",
+        "jszip": "^3.10.1",
+        "pmp-protobuf": "^1.8.5",
+        "sha.js": "^2.4.12"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.29.7",
+        "@babel/plugin-transform-optional-chaining": "^7.29.7",
+        "@babel/preset-env": "^7.29.7",
+        "babel-jest": "^27.5.1",
+        "babel-loader": "^8.4.1",
+        "copy-webpack-plugin": "^6.4.1",
+        "cross-env": "^7.0.3",
+        "css-loader": "^5.2.7",
+        "fastestsmallesttextencoderdecoder": "^1.0.22",
+        "file-loader": "^6.2.0",
+        "html-webpack-plugin": "^4.5.2",
+        "jest": "^27.5.1",
+        "pify": "6.1.0",
+        "rimraf": "^2.7.1",
+        "scratch-audio": "github:PenguinMod/PenguinMod-Audio#develop",
+        "scratch-render": "github:PenguinMod/PenguinMod-Render#develop",
+        "scratch-render-fonts": "github:PenguinMod/penguinmod-render-fonts#master",
+        "scratch-storage": "github:PenguinMod/PenguinMod-Storage#develop",
+        "scratch-svg-renderer": "github:PenguinMod/penguinmod-svg-renderer#develop",
+        "scratch-vm": "github:PenguinMod/PenguinMod-Vm#develop",
+        "style-loader": "^2.0.0",
+        "svelte": "^3.59.2",
+        "svelte-loader": "^3.2.4",
+        "url-loader": "^4.1.1",
+        "webpack": "4.47.0",
+        "webpack-bundle-analyzer": "^4.10.2",
+        "webpack-cli": "^4.10.0",
+        "webpack-dev-server": "^3.11.3",
+        "worker-loader": "^2.0.0"
+    },
+    "overrides": {
+        "webpack@4.47.0": {
+            "terser-webpack-plugin": "^4.2.3"
+        }
     }
-  }
 }
