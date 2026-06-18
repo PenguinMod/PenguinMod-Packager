@@ -1,30 +1,30 @@
 name: Build
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-  workflow_dispatch:
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
+    workflow_dispatch:
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Install Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 16.x
-    - name: Install dependencies
-      run: npm install
-    - name: Build
-      run: npm run build
-    - name: Test
-      run: npm test
-    - name: Build standalone
-      run: npm run build-standalone-prod
-    - name: Upload standalone artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: standalone
-        path: dist/standalone.html
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Install Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20.x
+            - name: Install dependencies
+              run: npm i -g pnpm@v11 && pnpm up && pnpm i --shamefully-hoist
+            - name: Build
+              run: pnpm run build
+            - name: Test
+              run: npm test
+            - name: Build standalone
+              run: npm run build-standalone-prod
+            - name: Upload standalone artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: standalone
+                  path: dist/standalone.html
